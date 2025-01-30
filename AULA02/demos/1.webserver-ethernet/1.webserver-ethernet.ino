@@ -4,7 +4,7 @@
 // Entre com os dados do MAC para o dispositivo.
 // Lembre-se que o ip depende de sua rede local
 byte mac[] = { 
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+  0x00, 0x1A, 0x2B, 0x3C, 0x4D, 0x5E };
 //IPAddress ip(10,10,2,102);
  
 // Inicializando a biblioteca Ehternet
