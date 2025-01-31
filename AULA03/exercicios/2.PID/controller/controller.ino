@@ -86,10 +86,6 @@ void loop()
   {
     startTime = millis();
 
-    Serial.print(SET_POINT);
-    Serial.print(" ");
-    Serial.println(currentTemp);
-
     dt = (float)et/1000;
     error = SET_POINT - currentTemp;
 
@@ -114,6 +110,10 @@ void loop()
     currentTemp += random(20);
     currentTemp -= random(10);
   }
+
+  Serial.print(SET_POINT);
+  Serial.print(" ");
+  Serial.println(currentTemp);
 
   display.clearDisplay();
   display.setCursor(35, 20);
