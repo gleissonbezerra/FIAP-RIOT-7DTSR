@@ -1,6 +1,6 @@
 import cv2 as cv
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(1)
 
 if not cap.isOpened():
     print("Erro ao tentar abrir a camera")
@@ -18,6 +18,8 @@ while True:
     # Manipulação da imagem
     #frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
+    print(frame.shape)
+    
     # display do resultado
     cv.imshow('frame', frame)
 

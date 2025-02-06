@@ -17,7 +17,7 @@ sensor.reset()
 #sensor.set_pixformat(sensor.GRAYSCALE)  # or sensor.RGB565
 sensor.set_pixformat(sensor.RGB565)
 
-sensor.set_framesize(sensor.QQVGA) #QVGA (160x120)
+sensor.set_framesize(sensor.QVGA) #QVGA (160x120)
 sensor.set_auto_gain(False) #Para facilitar a captura das TAGs
 sensor.set_auto_whitebal(False) #Para facilitar a captura das TAGs
 
@@ -104,7 +104,7 @@ corner_positions = np.zeros((4,3))
 while (True):
 
     #captura um frame. Necessário inverter nos dois eixos devido a posição da câmera no Robô
-    img = sensor.snapshot().replace(vflip=True,hmirror=True)
+    img = sensor.snapshot()#.replace(vflip=True,hmirror=True)
 
     #Utiliza o detector de tag disponível pora Micropython no firmware passando para ele a matriz intrisica para as projeções corretas
     tags = img.find_apriltags(families=image.TAG36H11, fx=f_x, fy=f_y, cx=c_x, cy=c_y)
