@@ -108,77 +108,86 @@ void setup()
 void loop() 
 {
 
-  if ( stringComplete )
+  if ( halt )
   {
-    //Serial.println(inputString);
-    if ( inputString == "close")
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(1000);   
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(1000);  
+  }else{
+
+    if ( stringComplete )
     {
-      halt = true;
-      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-      //Serial.println("Critical stop due to alarm condition. Please, reset manually!");
-      valveServo.write(0);
-    }
-    
-    stringComplete = false;
-    inputString = "";  
-  }
-  
-  // Reading temperature or humidity takes about 250 milliseconds!
-  h = dht.readHumidity();
-  t = dht.readTemperature();
-
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(t) || isnan(h)) 
-  {
-    //Serial.println("Failed to read from DHT");
-  } 
-  else
-  {
-
-    et = millis() - sampleTime;
-
-    if ( et > SAMPLE_TIME && avgCount > 0)
-    {
-      avgTemp = (float)avgTemp/avgCount;
-
-     Serial.print(tSetPoint);
-     Serial.print(" ");
-     Serial.print(avgTemp);
-
-      sampleTime = millis();
-      dt = (float)et/1000;
-
-      error = tSetPoint - avgTemp;
-
-      integralError = integralError + (float)error * dt;
-      derivativeError = (float)(error - pError)/dt;
-
-      pError = error;
-
-      currentPos = VALVE_OFFSET + (int)(kp*error + ki * integralError + kd * derivativeError);
-      currentPos = constrain(currentPos,0,180); 
-
-      if (!halt)
+      //Serial.println(inputString);
+      if ( inputString == "close")
       {
-        valveServo.write(currentPos);
-      }else{
-        currentPos = 0;
+        halt = true;
+        digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+        //Serial.println("Critical stop due to alarm condition. Please, reset manually!");
+        valveServo.write(0);
       }
-        
-     Serial.print(" ");
-     Serial.println(currentPos);
-
-      avgTemp = 0;
-      avgCount = 0;
-
-    }else{
-      avgTemp += t;
-      avgCount++;
+      
+      stringComplete = false;
+      inputString = "";  
     }
-
-
-    //prepare i2c message to master
-    outputString = String("{\"t\":"+String(t)+", \"h\":"+String(h)+"}");
     
+    // Reading temperature or humidity takes about 250 milliseconds!
+    h = dht.readHumidity();
+    t = dht.readTemperature();
+
+    // Check if any reads failed and exit early (to try again).
+    if (isnan(t) || isnan(h)) 
+    {
+      //Serial.println("Failed to read from DHT");
+    } 
+    else
+    {
+
+      et = millis() - sampleTime;
+
+      if ( et > SAMPLE_TIME && avgCount > 0)
+      {
+        avgTemp = (float)avgTemp/avgCount;
+
+      Serial.print(tSetPoint);
+      Serial.print(" ");
+      Serial.print(avgTemp);
+
+        sampleTime = millis();
+        dt = (float)et/1000;
+
+        error = tSetPoint - avgTemp;
+
+        integralError = integralError + (float)error * dt;
+        derivativeError = (float)(error - pError)/dt;
+
+        pError = error;
+
+        currentPos = VALVE_OFFSET + (int)(kp*error + ki * integralError + kd * derivativeError);
+        currentPos = constrain(currentPos,0,180); 
+
+        if (!halt)
+        {
+          valveServo.write(currentPos);
+        }else{
+          currentPos = 0;
+        }
+          
+      Serial.print(" ");
+      Serial.println(currentPos);
+
+        avgTemp = 0;
+        avgCount = 0;
+
+      }else{
+        avgTemp += t;
+        avgCount++;
+      }
+
+
+      //prepare i2c message to master
+      outputString = String("{\"t\":"+String(t)+", \"h\":"+String(h)+"}");
+      
+    }
   }
 }
